@@ -1,0 +1,17 @@
+body {
+    background: white;
+    color: black;
+
+}
+
+
+.game-container {
+    border-collapse: separate;
+    border-spacing: 10px;
+}
+
+
+footer {
+    display: flex;
+    justify-content: center;
+}
