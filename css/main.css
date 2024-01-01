@@ -11,7 +11,16 @@ body {
 }
 
 
-footer {
+footer,
+.board,
+.score,
+.victory,
+.restart {
     display: flex;
     justify-content: center;
+}
+
+.restart {
+    text-align: center;
+    display: none;
 }

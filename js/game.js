@@ -28,9 +28,16 @@ function createMat(ROWS, COLS) {
 // Called when game loads 
 function init() {
   gGame.isOn = true
+  gGame.alienCount = 0
   gBoard = createBoard()
-
   renderBoard(gBoard)
+  const elRestart = document.querySelector('.restart')
+  elRestart.style.display = 'none'
+  const elScore = document.querySelector('.score')
+  gAlianCounter = 0
+  elScore.innerText = `Your score is ${gAlianCounter}`
+  const elVictory = document.querySelector('.victory')
+  elVictory.innerText = ''
 }
 
 
@@ -68,7 +75,7 @@ function renderBoard(board) {
     for (var j = 0; j < board[i].length; j++) {
       const cell = board[i][j]
       var gameCell = ''
-      strHTML += `<td   data-i="${i}" data-j="${j}" > `
+      strHTML += `<td data-i="${i}" data-j="${j}" > `
       if (cell.gameObject === ALIEN) {
         strHTML += ALIEN
       } else if (cell.gameObject === HERO) {
@@ -95,9 +102,7 @@ function createCell(gameObject = null) {
 }
 // position such as: {i: 2, j: 7} 
 function updateCell(pos, gameObject = null) {
-  // update model
-  console.log('gameObject', gameObject)
-  console.log('pos in updateCell', pos)
+  // update model 
   gBoard[pos.i][pos.j].gameObject = gameObject
 
   // update DOM

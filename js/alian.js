@@ -9,6 +9,13 @@ var gIntervalAliens
 var gAliensTopRowIdx
 var gAliensBottomRowIdx
 var gIsAlienFreeze = true
+var gAlianCounter = 0
+
+// var gAlianPos = {
+//   i: ,
+//   j: gBoard[j]
+// }
+
 function createAliens(board) {
   board[i][j] = createCell(ALIEN)
   return board[i][j]
@@ -16,7 +23,14 @@ function createAliens(board) {
 
 
 
-function handleAlienHit(pos) { }
+function handleAlienHit(alianPos) {
+  if (gHero.isShoot) {
+    console.log('enter hit')
+    if (alianPos.i === gLaserPos.i &&
+      alianPos.j === gLaserPos.j) return true
+    else return false
+  }
+}
 function shiftBoardRight(board, fromI, toI) { }
 function shiftBoardLeft(board, fromI, toI) { }
 function shiftBoardDown(board, fromI, toI) { }

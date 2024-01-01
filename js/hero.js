@@ -1,36 +1,36 @@
 'use strict'
-const LASER_SPEED = 80
 const EMPTY = ''
 var gHero = {
   pos: { i: 12, j: 5 },
   isShoot: false
 }
+
 // creates the hero and place it on board 
 function createHero(board) {
-
   board[gHero.pos.i][gHero.pos.j] = createCell(HERO)
-
 }
 // Handle game keys 
 function onKeyDown(eventKeyboard) {
-  console.log('ev.key', eventKeyboard.key)
+  console.log('enter hero move')
   const nextLocation = {
     i: gHero.pos.i,
     j: gHero.pos.j
   }
+
   switch (eventKeyboard.key) {
     case 'ArrowLeft':
       nextLocation.j--
-      //console.log('nextLocation.j--', nextLocation.j--)
       break;
     case 'ArrowRight':
       nextLocation.j++
-      //console.log('nextLocation.j--', nextLocation.j++)
       break;
+    // case 'ArrowUp':
+    //   nextLaserLocation.i--
+    //   shoot(nextLaserLocation);
+    //   break;
     default:
       return null
   }
-  console.log('nextLocation', nextLocation)
   return nextLocation
 }
 // Move the hero right (1) or left (-1) 
@@ -61,6 +61,3 @@ function moveHero(eventKeyboard) {
 
 
 // Sets an interval for shutting (blinking) the laser up towards aliens 
-function shoot() { }
-// renders a LASER at specific cell for short time and removes it 
-function blinkLaser(pos) { }

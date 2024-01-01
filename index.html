@@ -9,17 +9,22 @@
   <link rel="stylesheet" href="css/main.css">
 </head>
 
-<body onload="init()" onkeyup="moveHero(event)">
-
-  <table class="board">
-  </table>
-
+<body onload="init()" onkeyup="moveHero(event); onKeyActive(event)">
+  <div class="container">
+    <div class="score">Your score is: 0</div>
+    <div class="victory"></div>
+    <div class="restart">
+      <button onclick="init()">restart</button>
+    </div>
+    <table class="board">
+    </table>
   </div>
   <footer>Itamar Kalimi</footer>
   <script src="js/alian.js"></script>
   <script src="js/game.js"></script>
   <script src="js/hero.js"></script>
   <script src="js/util.js"></script>
+  <script src="js/Laser.js"></script>
 
 </body>
 
