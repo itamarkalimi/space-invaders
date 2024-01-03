@@ -1,7 +1,7 @@
 'use strict'
 const EMPTY = ''
 var gHero = {
-  pos: { i: 12, j: 5 },
+  pos: { i: 14, j: 5 },
   isShoot: false
 }
 
@@ -11,7 +11,7 @@ function createHero(board) {
 }
 // Handle game keys 
 function onKeyDown(eventKeyboard) {
-  console.log('enter hero move')
+  //console.log('enter hero move')
   const nextLocation = {
     i: gHero.pos.i,
     j: gHero.pos.j

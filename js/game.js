@@ -6,9 +6,12 @@ const ALIEN_ROW_COUNT = 3
 const HERO = '♆'
 const ALIEN = '👽'
 const LASER = '⤊'
-var SKY = ''
+const LaserSuperMode = '^'
+const SKY = ''
 // Matrix of cell objects. e.g.: {type: SKY, gameObject: ALIEN} 
 var gBoard
+var gAlianBoard
+var gMoveAliansRight = true
 var gGame = {
   isOn: false,
   alienCount: 0
@@ -30,18 +33,42 @@ function init() {
   gGame.isOn = true
   gGame.alienCount = 0
   gBoard = createBoard()
+  //
   renderBoard(gBoard)
   const elRestart = document.querySelector('.restart')
   elRestart.style.display = 'none'
+  gAlianHitCounter = 0
   const elScore = document.querySelector('.score')
-  gAlianCounter = 0
-  elScore.innerText = `Your score is ${gAlianCounter}`
+  elScore.innerText = `Your score is ${gAlianHitCounter}`
   const elVictory = document.querySelector('.victory')
   elVictory.innerText = ''
+  moveAliens()
+  renderBoard(gBoard)
+  gCounterSuperMode = 3
+  // var allAliensInterval = setInterval(() => {
+
+  //   gStartRowIdxRight++
+  //   gEndRowIdxRight++
+  //   gStartRowIdxLeft++
+  //   gEndRowIdxLeft++
+  //   gStartRowIdxDown++
+  //   gEndRowIdxDown++
+  // }, 10000)
+  // gAlianBoard = createAlienArea(gBoard, 0, ALIEN_ROW_COUNT, 0, ALIEN_ROW_LENGTH)
+  // var allAliensInterval = setInterval(() => {
+
+  //   moveAliens()
+
+  // }, 10000)
+  // if (gBoard[BOARD_SIZE] === BOARD_SIZE) {
+  //   clearInterval(allAliensInterval)
+  // }
+  //console.log('gBoard', gBoard)
+
 }
 
 
-
+//console.log('gAlianBoard2', gAlianBoard)
 // Create and returns the board with aliens on top, ground at bottom 
 // use the functions: createCell, createHero, createAliens 
 
@@ -60,22 +87,20 @@ function createBoard() {
     }
   }
   createHero(board)
-  console.table(board)
   return board
 
 }
+
 // Render the board as a <table> to the page 
 function renderBoard(board) {
   // DONE: Render the board
   var strHTML = ''
-  console.log('board.length', board.length)
   for (var i = 0; i < board.length; i++) {
 
     strHTML += '<tr>\n'
     for (var j = 0; j < board[i].length; j++) {
       const cell = board[i][j]
-      var gameCell = ''
-      strHTML += `<td data-i="${i}" data-j="${j}" > `
+      strHTML += `<td class="cell" data-i="${i}" data-j="${j}" > `
       if (cell.gameObject === ALIEN) {
         strHTML += ALIEN
       } else if (cell.gameObject === HERO) {
@@ -104,7 +129,6 @@ function createCell(gameObject = null) {
 function updateCell(pos, gameObject = null) {
   // update model 
   gBoard[pos.i][pos.j].gameObject = gameObject
-
   // update DOM
   var elCell = getElCell(pos)
   elCell.innerHTML = gameObject || ''

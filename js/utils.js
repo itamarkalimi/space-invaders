@@ -278,3 +278,68 @@ el.innerText
 // get data in html (dataset)
 elElement.dataset.nameOfdataset// like dataset.i/j 
 
+
+
+function sumArea(mat, rowIdxStart, rowIdxEnd, colIdxStart, colIdxEnd) {
+  var sumMatArea = 0
+  for (var i = rowIdxStart; i <= rowIdxEnd; i++) {
+    for (var j = colIdxStart; j <= colIdxEnd; j++) {
+      sumMatArea += mat[i][j]
+    }
+  }
+  return sumMatArea
+}
+
+//create matrix
+function createAlienArea(mat, rowIdxStart, rowIdxEnd, colIdxStart, colIdxEnd) {
+  const newMat = []
+  for (var i = rowIdxStart; i < rowIdxEnd; i++) {
+    const row = []
+    for (var j = colIdxStart; j < colIdxEnd; j++) {
+      row.push(mat[i][j])
+    }
+    newMat.push(row)
+  }
+  return newMat
+}
+
+gAlianBoard = createAlienArea(gBoard, 0, 0,)
+
+
+
+// function shiftBoardRight(board, fromI, toI) {
+//   gIntervalAliens = setInterval(() => {
+//     //update model
+//     board[i][j++]
+
+//     gAlienIntervalCounter--
+//     console.log('gAlienIntervalCounter', gAlienIntervalCounter)
+//     console.table(gBoard)
+//     if (gAlienIntervalCounter === 0) {
+//       clearInterval(gIntervalAliens)
+//     }
+//   }, ALIEN_SPEED)
+// }
+
+// function shiftBoardRight(board, fromI, toI) {
+//   gIntervalAliens = setInterval(() => {
+//     // Update model
+//     for (var i = 0; i < board.length; i++) {
+//       for (var j = toI; j >= fromI; j--) {
+//         // Shift elements to the right
+//         board[i][j] = board[i][j - 1];
+//       }
+//     }
+
+//     // Increment the counter
+//     gAlienIntervalCounter--;
+
+//     // Print the updated board
+//     console.table(gBoard);
+
+//     // Check if the shift is complete
+//     if (gAlienIntervalCounter === 0) {
+//       clearInterval(gIntervalAliens);
+//     }
+//   }, ALIEN_SPEED);
+// }

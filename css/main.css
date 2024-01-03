@@ -5,9 +5,11 @@ body {
 }
 
 
-.game-container {
-    border-collapse: separate;
-    border-spacing: 10px;
+.cell {
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    text-align: center;
 }
 
 
@@ -21,6 +23,11 @@ footer,
 }
 
 .restart {
-    text-align: center;
     display: none;
+}
+
+.start-game {
+    display: flex;
+    justify-content: center;
+    text-align: center;
 }
