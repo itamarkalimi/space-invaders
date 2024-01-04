@@ -343,3 +343,196 @@ gAlianBoard = createAlienArea(gBoard, 0, 0,)
 //     }
 //   }, ALIEN_SPEED);
 // }
+
+function shiftBoardRight(board, fromI = 0, toI = 3) {
+
+}
+
+//////
+function shiftBoardRight2(board, fromI = 0, toI = 3) {
+  gIsDirectionIdxRight = true
+  for (var i = fromI; i < toI; i++) {
+    console.log('shiftBoardRight fromI:', fromI)
+    console.log('shiftBoardRight toI:', toI)
+    for (var j = 8; j < board[i].length; j++) {
+      if (board[i][j].gameObject === null) {
+        board[i][j] = createCell(ALIEN)
+        break
+      }
+    }
+  }
+  // delete alian update dom
+  for (var i = fromI; i < toI; i++) {
+    for (var j = 0; j < 8; j++) {
+      if (board[i][j].gameObject === ALIEN) {
+        board[i][j] = createCell()
+        break
+        // console.log('board[i][j] null', board[i][j])
+      }
+    }
+  }
+  renderBoard(board)
+  console.table(board)
+}
+
+function shiftBoardLeft(board, fromI = 0, toI = 3) {
+  // delete alian update dom
+  gIsDirectionIdxRight = false
+  for (var i = fromI; i < toI; i++) {
+    console.log('enter left create null')
+    for (var j = 13; j > 6; j--) {
+      if (board[i][j].gameObject === ALIEN) {
+        board[i][j] = createCell()
+        break
+        // console.log('board[i][j] null', board[i][j])
+      }
+    }
+  }
+
+  for (var i = fromI; i < toI; i++) {
+    console.log('enter left create alien')
+    for (var j = 6; j >= 0; j--) {
+      if (board[i][j].gameObject === null) {
+        board[i][j] = createCell(ALIEN)
+        break
+      }
+    }
+  }
+
+  renderBoard(board)
+  console.table(board)
+}
+
+
+function shiftBoardDown(board, fromI = 0, toI = 3) {
+  // get first line
+  for (var i = fromI; i < fromI + 1; i++) {
+    for (var j = 0; j < board[i].length; j++) {
+      if (board[i][j].gameObject === ALIEN) {
+        board[i][j] = createCell()
+
+      }
+    }
+  }
+  gCellsDownj = (gIsDirectionIdxRight) ? 6 : 0
+  gCellsDownLength = (gIsDirectionIdxRight) ? board[i].length : 8
+  for (var i = toI; i < toI + 1; i++) {
+    for (var j = gCellsDownj; j < gCellsDownLength; j++) {
+      if (board[i][j].gameObject === null) {
+        board[i][j] = createCell(ALIEN)
+
+      }
+    }
+  }
+  // update DOM
+  renderBoard(board)
+}
+
+/////////// tyota 
+function moveRight(board, fromI = 0, toI) {
+  for (var i = fromI; i < gAlienBoard.length; i++) {
+    for (var j = 0; j < board[BOARD_SIZE].length - gAlienBoard[i].length; j++) {
+      if (board[i][j].gameObject === ALIEN) {
+        board[i][j] = createCell()
+        // console.log('board[i][j] null', board[i][j])
+      }
+    }
+  }
+}
+fromI++
+function shiftBoardDown(board, fromI = 0, toI = gAlianBoard.length + 1) {
+  for (var j = 0; j < board[BOARD_SIZE].length - gAlienBoard[i].length; j++) {
+    if (board[fromI][j].gameObject === ALIEN) {
+      board[fromI][j] = createCell()
+      // console.log('board[i][j] null', board[i][j])
+    }
+  }
+
+  for (var j = 0; j < board[BOARD_SIZE].length - gAlienBoard[i].length; j++) {
+    if (board[toI][j].gameObject === null) {
+      board[toI][j] = createCell(ALIEN)
+      // console.log('board[i][j] null', board[i][j])
+    }
+  }
+
+  renderBoard(board)
+  console.table(board)
+}
+
+// shiftBoardDown version 1
+function shiftBoardDown(board, fromI = 0, toI = 3) {
+  // get first line
+  for (var i = fromI; i < fromI + 1; i++) {
+    for (var j = 0; j < board[i].length; j++) {
+      if (board[i][j].gameObject === ALIEN) {
+        board[i][j] = createCell()
+
+      }
+    }
+  }
+  gCellsDownj = (gIsDirectionIdxRight) ? 6 : 0
+  gCellsDownLength = (gIsDirectionIdxRight) ? board[i].length : 8
+  for (var i = toI; i < toI + 1; i++) {
+    for (var j = gCellsDownj; j < gCellsDownLength; j++) {
+      if (board[i][j].gameObject === null) {
+        board[i][j] = createCell(ALIEN)
+
+      }
+    }
+  }
+  // update DOM
+  renderBoard(board)
+}
+
+// moveAliens vesion 1
+function moveAliens() {
+  gIntervalAliens = setInterval(() => {
+
+    shiftBoardRight(gBoard, gStartRowIdxRight, gEndRowIdxRight)
+
+    console.log('startRowIdx:', gStartRowIdxRight)
+    console.log('endRowIdx:', gEndRowIdxRight)
+
+    //change the counter
+    gAlienIntervalCounter--;
+
+    // Print the updated board
+    //console.table(gBoard);
+
+    // Check if the shift is complete
+    if (gAlienIntervalCounter === 0) {
+      clearInterval(gIntervalAliens);
+      gAlienIntervalCounter = 6
+
+      gIntervalAliensLeft = setInterval(() => {
+        shiftBoardLeft(gBoard, gStartRowIdxLeft, gEndRowIdxLeft)
+
+        console.log('gStartRowIdxLeft:', gStartRowIdxLeft)
+        console.log('gEndRowIdxLeft:', gEndRowIdxLeft)
+        //shiftBoardLeft(gBoard, startRowIdx, endRowIdx)
+        //Increment the counter
+        gAlienIntervalCounter--;
+
+        // Print the updated board
+        //console.table(gBoard);
+
+        // Check if the shift is complete
+        if (gAlienIntervalCounter === 0) {
+          clearInterval(gIntervalAliensLeft);
+
+          gIntervalAliensDown = setInterval(() => {
+            shiftBoardDown(gBoard, gStartRowIdxDown, gEndRowIdxDown)
+
+            console.log('gStartRowIdxDown:', gStartRowIdxDown)
+            console.log('gEndRowIdxDown:', gEndRowIdxDown)
+
+            gAlienIntervalDown--
+            if (gAlienIntervalDown === 0)
+              clearInterval(gIntervalAliensDown)
+          })
+        }
+      }, ALIEN_SPEED)
+
+    }
+  }, ALIEN_SPEED)
+}

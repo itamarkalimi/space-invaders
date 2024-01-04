@@ -22,15 +22,21 @@ var gAlienIntervalCounter = 6
 var gIsDirectionIdxRight = true
 var gCellsDownj
 var gCellsDownLength
-var gNum = 1
+// globel variable for moveAliens
+var fromJRight = 0
+var toJRight = 8
+var fromI = 0
+var toI = 3
+var fromJLeft = 13
+var toJleft = 5
+var isMoveDown = false
 // var gAlianPos = {
 //   i: ,
 //   j: gBoard[j]
 // }
 
 function createAliens(board) {
-  board[i][j] = createCell(ALIEN)
-  return board[i][j]
+
 }
 
 
@@ -57,84 +63,129 @@ function createAlienArea(mat, rowIdxStart, rowIdxEnd, colIdxStart, colIdxEnd) {
   return newMat
 }
 
-function shiftBoardRight(board, fromI = 0, toI = 3) {
-  gIsDirectionIdxRight = true
+function shiftBoardRight(board, fromJRight, toJRight) {
+  // clear first col
+  if (toJRight > 13) return
   for (var i = fromI; i < toI; i++) {
-    console.log('shiftBoardRight fromI:', fromI)
-    console.log('shiftBoardRight toI:', toI)
-    for (var j = 8; j < board[i].length; j++) {
-      if (board[i][j].gameObject === null) {
-        board[i][j] = createCell(ALIEN)
-        break
-      }
+    if (board[i][fromJRight].gameObject === ALIEN) {
+      board[i][fromJRight] = createCell()
+      //console.log('fromJRight:', fromJRight)
     }
   }
-  // delete alian update dom
+  // create another col
   for (var i = fromI; i < toI; i++) {
-    for (var j = 0; j < 8; j++) {
-      if (board[i][j].gameObject === ALIEN) {
-        board[i][j] = createCell()
-        break
-        // console.log('board[i][j] null', board[i][j])
+    if (board[i][toJRight].gameObject === null) {
+      if (!board[i][toJRight].isHit) {
+        board[i][toJRight] = createCell(ALIEN)
       }
+      // console.log('board[i][j] null', board[i][j])
+      //console.log('toJRight:', toJRight)
     }
   }
+
   renderBoard(board)
-  console.table(board)
+
 }
 
-function shiftBoardLeft(board, fromI = 0, toI = 3) {
+function shiftBoardLeft(board, fromJLeft, toJleft) {
   // delete alian update dom
+  if (toJleft < 0) return
+  console.log('enter shiftlieft')
   gIsDirectionIdxRight = false
   for (var i = fromI; i < toI; i++) {
-    console.log('enter left create null')
-    for (var j = 13; j > 6; j--) {
-      if (board[i][j].gameObject === ALIEN) {
-        board[i][j] = createCell()
-        break
-        // console.log('board[i][j] null', board[i][j])
-      }
+    if (board[i][fromJLeft].gameObject === ALIEN) {
+      board[i][fromJLeft] = createCell()
+      //console.log('fromJLeft:', fromJLeft)
     }
   }
-
+  // create another col
   for (var i = fromI; i < toI; i++) {
-    console.log('enter left create alien')
-    for (var j = 6; j >= 0; j--) {
-      if (board[i][j].gameObject === null) {
-        board[i][j] = createCell(ALIEN)
-        break
+    if (board[i][toJleft].gameObject === null) {
+      if (!board[i][toJleft].isHit) {
+        board[i][toJleft] = createCell(ALIEN)
       }
+      //console.log('toJleft:', toJleft)
+    }
+  }
+
+
+  renderBoard(board)
+}
+
+
+
+
+
+function shiftBoardDown(board, fromI, toI) {
+  if (toI > 13) clearInterval(allAliensInterval)
+
+  for (var j = 0; j < 8; j++) {
+    if (board[fromI][j].gameObject === ALIEN) {
+      board[fromI][j] = createCell()
+      // console.log('board[i][j] null', board[i][j])
+    }
+  }
+
+  for (var j = 0; j < 8; j++) {
+    if (board[toI][j].gameObject === null) {
+      if (!board[toI][j].isHit) {
+        board[toI][j] = createCell(ALIEN)
+      }
+      // console.log('board[i][j] null', board[i][j])
     }
   }
 
   renderBoard(board)
-  console.table(board)
+
+}
+
+/////////// tyota
+function moveAliens() {
+  allAliensInterval = setInterval(() => {
+    if (gIsDirectionIdxRight) {
+      shiftBoardRight(gBoard, fromJRight, toJRight)
+      fromJRight++
+      toJRight++
+      if (toJRight > 14) {
+        gIsDirectionIdxRight = false
+        fromJRight = 0
+        toJRight = 8
+        isMoveDown = false
+      }
+
+    }
+
+    if (!gIsDirectionIdxRight) {
+      shiftBoardLeft(gBoard, fromJLeft, toJleft)
+
+      fromJLeft--
+      toJleft--
+      if (fromJLeft === 0) {
+        gIsDirectionIdxRight = true
+        fromJLeft = 13
+        toJleft = 5
+        isMoveDown = true
+      }
+    }
+    // fromJLeft = 13
+    // toJleft = 5
+    if (isMoveDown && gIsDirectionIdxRight) {
+      shiftBoardDown(gBoard, fromI, toI)
+      // fromJLeft = 13
+      // toJleft = 5
+      if (gIsDirectionIdxRight) {
+        fromI++
+        toI++
+        isMoveDown = false
+      }
+
+    }
+  }, ALIEN_SPEED)
+  //console.table(gBoard)
 }
 
 
-function shiftBoardDown(board, fromI = 0, toI = 3) {
-  // get first line
-  for (var i = fromI; i < fromI + 1; i++) {
-    for (var j = 0; j < board[i].length; j++) {
-      if (board[i][j].gameObject === ALIEN) {
-        board[i][j] = createCell()
 
-      }
-    }
-  }
-  gCellsDownj = (gIsDirectionIdxRight) ? 6 : 0
-  gCellsDownLength = (gIsDirectionIdxRight) ? board[i].length : 8
-  for (var i = toI; i < toI + 1; i++) {
-    for (var j = gCellsDownj; j < gCellsDownLength; j++) {
-      if (board[i][j].gameObject === null) {
-        board[i][j] = createCell(ALIEN)
-
-      }
-    }
-  }
-  // update DOM
-  renderBoard(board)
-}
 // runs the interval for moving aliens side to side and down 
 // it re-renders the board every time
 // when the aliens are reaching the hero row - interval stops 
@@ -190,56 +241,3 @@ function shiftBoardDown(board, fromI = 0, toI = 3) {
 //     }
 //   }, ALIEN_SPEED)
 // }
-
-/////////// tyota
-function moveAliens() {
-  gIntervalAliens = setInterval(() => {
-
-    shiftBoardRight(gBoard, gStartRowIdxRight, gEndRowIdxRight)
-
-    console.log('startRowIdx:', gStartRowIdxRight)
-    console.log('endRowIdx:', gEndRowIdxRight)
-
-    //change the counter
-    gAlienIntervalCounter--;
-
-    // Print the updated board
-    //console.table(gBoard);
-
-    // Check if the shift is complete
-    if (gAlienIntervalCounter === 0) {
-      clearInterval(gIntervalAliens);
-      gAlienIntervalCounter = 6
-
-      gIntervalAliensLeft = setInterval(() => {
-        shiftBoardLeft(gBoard, gStartRowIdxLeft, gEndRowIdxLeft)
-
-        console.log('gStartRowIdxLeft:', gStartRowIdxLeft)
-        console.log('gEndRowIdxLeft:', gEndRowIdxLeft)
-        //shiftBoardLeft(gBoard, startRowIdx, endRowIdx)
-        //Increment the counter
-        gAlienIntervalCounter--;
-
-        // Print the updated board
-        //console.table(gBoard);
-
-        // Check if the shift is complete
-        if (gAlienIntervalCounter === 0) {
-          clearInterval(gIntervalAliensLeft);
-
-          gIntervalAliensDown = setInterval(() => {
-            shiftBoardDown(gBoard, gStartRowIdxDown, gEndRowIdxDown)
-
-            console.log('gStartRowIdxDown:', gStartRowIdxDown)
-            console.log('gEndRowIdxDown:', gEndRowIdxDown)
-
-            gAlienIntervalDown--
-            if (gAlienIntervalDown === 0)
-              clearInterval(gIntervalAliensDown)
-          })
-        }
-      }, ALIEN_SPEED)
-
-    }
-  }, ALIEN_SPEED)
-}

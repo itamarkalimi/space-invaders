@@ -11,6 +11,7 @@ const SKY = ''
 // Matrix of cell objects. e.g.: {type: SKY, gameObject: ALIEN} 
 var gBoard
 var gAlianBoard
+var allAliensInterval
 var gMoveAliansRight = true
 var gGame = {
   isOn: false,
@@ -42,29 +43,22 @@ function init() {
   elScore.innerText = `Your score is ${gAlianHitCounter}`
   const elVictory = document.querySelector('.victory')
   elVictory.innerText = ''
-  moveAliens()
-  renderBoard(gBoard)
+  gAlianBoard = createAlienArea(gBoard, 0, ALIEN_ROW_COUNT, 0, ALIEN_ROW_LENGTH)
+
   gCounterSuperMode = 3
-  // var allAliensInterval = setInterval(() => {
 
-  //   gStartRowIdxRight++
-  //   gEndRowIdxRight++
-  //   gStartRowIdxLeft++
-  //   gEndRowIdxLeft++
-  //   gStartRowIdxDown++
-  //   gEndRowIdxDown++
-  // }, 10000)
-  // gAlianBoard = createAlienArea(gBoard, 0, ALIEN_ROW_COUNT, 0, ALIEN_ROW_LENGTH)
-  // var allAliensInterval = setInterval(() => {
+  moveAliens()
 
-  //   moveAliens()
 
-  // }, 10000)
-  // if (gBoard[BOARD_SIZE] === BOARD_SIZE) {
+
+
+
+
+  // if (toI > 13) {
+  //   console.log('enter close aliens nterval')
   //   clearInterval(allAliensInterval)
   // }
-  //console.log('gBoard', gBoard)
-
+  //console.log('gBoard', gBoard)  (fromJRight === BOARD_SIZE - 1) || (fromJRight === BOARD_SIZE - 1)
 }
 
 
@@ -105,6 +99,12 @@ function renderBoard(board) {
         strHTML += ALIEN
       } else if (cell.gameObject === HERO) {
         strHTML += HERO
+      } else if (cell.gameObject === null) {
+        strHTML += ''
+      } else if (cell.isHit) {
+        console.log('enter is hit model')
+        strHTML += ''
+        updateCell(gLaserPos)
       }
       strHTML += `</td >`
     }
@@ -122,7 +122,8 @@ function renderBoard(board) {
 function createCell(gameObject = null) {
   return {
     type: SKY,
-    gameObject: gameObject
+    gameObject: gameObject,
+    isHit: false
   }
 }
 // position such as: {i: 2, j: 7} 
@@ -132,4 +133,13 @@ function updateCell(pos, gameObject = null) {
   // update DOM
   var elCell = getElCell(pos)
   elCell.innerHTML = gameObject || ''
+}
+
+function gameOver() {
+  if (gGame.alienCount === 24 || gAlianHitCounter === 240) {
+    const elVicory = document.querySelector('.victory')
+    elVicory.innerText = 'You Won'
+    const elRestart = document.querySelector('.restart')
+    elRestart.style.display = 'block'
+  }
 }
