@@ -17,7 +17,7 @@ var gEndRowIdxDown = 3
 // (1) shifting down and (2) last alien was cleared from row 
 var gAliensTopRowIdx
 var gAliensBottomRowIdx
-var gIsAlienFreeze = true
+var gIsAlienFreeze = false
 var gAlienIntervalCounter = 6
 var gIsDirectionIdxRight = true
 var gCellsDownj
@@ -70,14 +70,14 @@ function shiftBoardRight(board, fromJRight, toJRight) {
     if (board[i][fromJRight].gameObject === ALIEN) {
       board[i][fromJRight] = createCell()
       //console.log('fromJRight:', fromJRight)
+
     }
   }
   // create another col
   for (var i = fromI; i < toI; i++) {
     if (board[i][toJRight].gameObject === null) {
-      if (!board[i][toJRight].isHit) {
-        board[i][toJRight] = createCell(ALIEN)
-      }
+      board[i][toJRight] = createCell(ALIEN)
+
       // console.log('board[i][j] null', board[i][j])
       //console.log('toJRight:', toJRight)
     }
@@ -90,8 +90,7 @@ function shiftBoardRight(board, fromJRight, toJRight) {
 function shiftBoardLeft(board, fromJLeft, toJleft) {
   // delete alian update dom
   if (toJleft < 0) return
-  console.log('enter shiftlieft')
-  gIsDirectionIdxRight = false
+  //gIsDirectionIdxRight = false
   for (var i = fromI; i < toI; i++) {
     if (board[i][fromJLeft].gameObject === ALIEN) {
       board[i][fromJLeft] = createCell()
@@ -101,9 +100,7 @@ function shiftBoardLeft(board, fromJLeft, toJleft) {
   // create another col
   for (var i = fromI; i < toI; i++) {
     if (board[i][toJleft].gameObject === null) {
-      if (!board[i][toJleft].isHit) {
-        board[i][toJleft] = createCell(ALIEN)
-      }
+      board[i][toJleft] = createCell(ALIEN)
       //console.log('toJleft:', toJleft)
     }
   }
@@ -128,9 +125,8 @@ function shiftBoardDown(board, fromI, toI) {
 
   for (var j = 0; j < 8; j++) {
     if (board[toI][j].gameObject === null) {
-      if (!board[toI][j].isHit) {
-        board[toI][j] = createCell(ALIEN)
-      }
+      board[toI][j] = createCell(ALIEN)
+
       // console.log('board[i][j] null', board[i][j])
     }
   }
@@ -156,6 +152,7 @@ function moveAliens() {
     }
 
     if (!gIsDirectionIdxRight) {
+      if (gIsAlienFreeze) return
       shiftBoardLeft(gBoard, fromJLeft, toJleft)
 
       fromJLeft--

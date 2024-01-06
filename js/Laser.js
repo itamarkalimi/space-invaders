@@ -105,23 +105,25 @@ function blinkLaser(i, j) {
         // mark if cell is hit
 
         gLaserPos = { i, j }
-        gBoard[i][j].isHit = true
+        console.log('gLaserPos', gLaserPos)
+        //gBoard[i][j].isHit = true
         // DONE: update the DOM
         // update DOM
         updateCell(gLaserPos, LASER)
-        console.log('isSuperMode in laser:', isSuperMode)
+        // console.log('isSuperMode in laser:', isSuperMode)
       } else {
         // update model
         gBoard[i][j] = createCell(LaserSuperMode)
         //console.log(' pos after:', pos)
         gLaserPos = { i, j }
-        gBoard[i][j].isHit = true
+        //gBoard[i][j].isHit = true
         // DONE: update the DOM
         updateCell(gLaserPos, LaserSuperMode)
         console.log('isSuperMode in lasersupermode:', isSuperMode)
       }
       // if laser hit alian return and stop the game
       // need to check if i entered the game
+      // not working
       if (gLaserPos.i === gBoard[0]) {
         clearInterval(laserInterval)
       }
@@ -132,6 +134,7 @@ function blinkLaser(i, j) {
       clearInterval(laserInterval)
       updateCell(gLaserPos)
       updateCell(gLaserPosAfterHit)
+      console.log('gLaserPosAfterHit', gLaserPosAfterHit)
       gAlianHitCounter += 10
       const elScore = document.querySelector('.score')
       elScore.innerText = `Your score is ${gAlianHitCounter}`

@@ -104,7 +104,7 @@ function renderBoard(board) {
       } else if (cell.isHit) {
         console.log('enter is hit model')
         strHTML += ''
-        updateCell(gLaserPos)
+        //updateCell(gLaserPos)
       }
       strHTML += `</td >`
     }
